@@ -2,8 +2,7 @@
 "use client";  // Directive pour indiquer que ce composant est un Client Component
 
 import { usePathname } from "next/navigation";
-import Header from "./navbar";
-import { FooterComp } from "./footerComp";
+import Header from "./header";
 
 export default function ClientOnlyLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -11,9 +10,9 @@ export default function ClientOnlyLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      {/* {!isAdminPanel && <Header />} */}
+      {!isAdminPanel && <Header />}
       {children}
-      {!isAdminPanel && <FooterComp />}
+      {/* {!isAdminPanel && <FooterComp />} */}
     </>
   );
 }

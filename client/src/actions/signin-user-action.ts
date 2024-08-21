@@ -37,7 +37,6 @@ export async function signinUserAction(values: unknown): Promise<Res> {
               "Please verify your email, sign up again to resend verification email",
             statusCode: 401,
           };
-        // custom error
         case "OAuthAccountAlreadyLinked" as AuthError["type"]:
           return {
             success: false,
