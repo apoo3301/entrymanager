@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
 import db from "@/drizzle";
 import * as schema from "@/drizzle/schema";
-import { oauthVerifyEmailAction } from "@/actions/oauth-verify-email-action";
+import { oauthVerifyEmailAction } from "@/action/oauth-verify-email-action";
 import { USER_ROLES } from "@/lib/constants";
 import type { AdapterUser } from "@auth/core/adapters";
 import { getTableColumns } from "drizzle-orm";

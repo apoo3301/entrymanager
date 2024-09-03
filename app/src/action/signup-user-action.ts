@@ -7,9 +7,9 @@ import db from "@/drizzle";
 import { lower, users } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { USER_ROLES } from "@/lib/constants";
-import { findAdminUserEmailAddresses } from "@/resources/admin-user-email-address-queries";
-import { createVerificationTokenAction } from "@/actions/create-verification-token-action";
-import { sendSignupUserEmail } from "@/actions/mail/send-signup-user-email";
+import { findAdminUserEmailAddresses } from "@/ressources/admin-user-email-address-queries";
+import { createVerificationTokenAction } from "@/action/create-verification-token-action";
+import { sendSignupUserEmail } from "@/action/mail/send-signup-user-email";
 
 type Res =
   | { success: true }

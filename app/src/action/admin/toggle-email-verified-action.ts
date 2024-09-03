@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import db from "@/drizzle";
 import { users } from "@/drizzle/schema";
 import { USER_ROLES } from "@/lib/constants";
-import { findUserByEmail } from "@/resources/user-queries";
+import { findUserByEmail } from "@/ressources/user-queries";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

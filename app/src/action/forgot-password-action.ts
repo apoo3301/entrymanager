@@ -1,10 +1,10 @@
 "use server";
 
-import { findUserByEmail } from "@/resources/user-queries";
+import { findUserByEmail } from "@/ressources/user-queries";
 import { ForgotPasswordSchema } from "@/validators/forgot-password-validator";
 import * as v from "valibot";
-import { createVerificationTokenAction } from "@/actions/create-verification-token-action";
-import { sendForgotPasswordEmail } from "@/actions/mail/send-forgot-password-email";
+import { createVerificationTokenAction } from "@/action/create-verification-token-action";
+import { sendForgotPasswordEmail } from "@/action/mail/send-forgot-password-email";
 
 type Res =
   | { success: true }

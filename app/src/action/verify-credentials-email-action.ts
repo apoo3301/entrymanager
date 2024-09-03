@@ -2,8 +2,8 @@
 
 import db from "@/drizzle";
 import { users, verificationTokens } from "@/drizzle/schema";
-import { findUserByEmail } from "@/resources/user-queries";
-import { findVerificationTokenByToken } from "@/resources/verification-token-queries";
+import { findUserByEmail } from "@/ressources/user-queries";
+import { findVerificationTokenByToken } from "@/ressources/verification-token-queries";
 import { eq } from "drizzle-orm";
 
 export async function verifyCredentialsEmailAction(
