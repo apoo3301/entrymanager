@@ -8,7 +8,7 @@ import { oauthVerifyEmailAction } from "@/actions/oauth-verify-email-action";
 import { USER_ROLES } from "@/lib/constants";
 import type { AdapterUser } from "@auth/core/adapters";
 import { getTableColumns } from "drizzle-orm";
-import { findAdminUserEmailAddresses } from "./resources/admin-user-email-address-queries";
+import { findAdminUserEmailAddresses } from "@/ressources/admin-user-email-address-queries";
 
 export const authConfig = {
   adapter: {
