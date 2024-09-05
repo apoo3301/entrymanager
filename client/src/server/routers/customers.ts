@@ -115,4 +115,17 @@ export const customersRouter = router({
       throw new Error('Failed to update customer.');
     }
   }),
+  getEmails: publicProcedure.query(async () => {
+    try {
+      const emails = await db
+        .select({ email: customers.email })
+        .from(customers)
+        .orderBy(customers.email);
+
+      return emails.map(({ email }) => email);
+    } catch (e) {
+      console.error('Error fetching customer emails:', e);
+      throw new Error('Failed to fetch customer emails.');
+    }
+  }),
 });

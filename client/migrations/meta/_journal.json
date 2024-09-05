@@ -8,6 +8,13 @@
       "when": 1725451158366,
       "tag": "0000_tough_earthquake",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725540878990,
+      "tag": "0001_mute_toro",
+      "breakpoints": true
     }
   ]
 }

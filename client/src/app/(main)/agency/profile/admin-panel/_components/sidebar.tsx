@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, ShoppingCart, Package, Users, LineChart, Package2, Bell } from "lucide-react";
+import { Home, ShoppingCart, Package, Users, LineChart, Package2, Bell, Settings, MailCheck } from "lucide-react";
 import { SiBoat } from "@icons-pack/react-simple-icons";
 import { ModeToggle } from "@/components/togglemode";
 
@@ -31,6 +31,14 @@ export const Sidebar = () => {
             <Link href="/agency/profile/admin-panel/analytics" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
               <LineChart className="h-4 w-4" />
               Analytics
+            </Link>
+            <Link href="/agency/profile/admin-panel/smtp" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
+              <Settings className="h-4 w-4" />
+              SMTP
+            </Link>
+            <Link href="/agency/profile/admin-panel/mailing" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
+              <MailCheck className="h-4 w-4" />
+              Mailing Config
             </Link>
           </nav>
         </div>

@@ -8,17 +8,20 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator"; // Added for payment section
-import { FilePenIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { FilePenIcon, ChevronDownIcon } from "lucide-react";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export default function CustomerDetailPage({ params }: { params: any }) {
     const { id } = params;
     const router = useRouter();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+    const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
+    const [selectedEmailForDialog, setSelectedEmailForDialog] = useState<string | null>(null);
     const [customerData, setCustomerData] = useState({
         id: '',
         email: '',
@@ -27,8 +30,10 @@ export default function CustomerDetailPage({ params }: { params: any }) {
         createdAt: '',
         phoneNumber: '',
     });
+    const [customerEmails, setCustomerEmails] = useState<string[]>([]);
 
     const { data, isLoading, error } = trpc.customers.getById.useQuery({ id });
+    const { data: emailsData } = trpc.customers.getEmails.useQuery();
     const deleteCustomer = trpc.customers.delete.useMutation({
         onSuccess: () => {
             console.log('Customer deleted successfully.');
@@ -64,14 +69,18 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                 fullName: data.fullname,
                 duration: data.duree.toString(),
                 createdAt: data.createdAt,
-                phoneNumber: '', // You may want to set this if available
+                phoneNumber: '',
             });
         }
     }, [data]);
 
-    if (isLoading) return <p>Loading...</p>;
-
-    if (!data) return <p>No customer found</p>;
+    useEffect(() => {
+        if (emailsData) {
+            // Update customerEmails with the new email
+            setCustomerEmails([customerData.email || '']);
+            setSelectedEmail(customerData.email || '');
+        }
+    }, [emailsData, customerData.email]);
 
     const handleDelete = async () => {
         try {
@@ -96,6 +105,15 @@ export default function CustomerDetailPage({ params }: { params: any }) {
 
     const handleEditCustomer = () => {
         setIsEditModalOpen(true);
+    };
+
+    const handleEmailSelect = (email: string) => {
+        setSelectedEmailForDialog(email);
+        setIsEmailDialogOpen(true);
+    };
+
+    const handleActionSelect = (action: string) => {
+        console.log(`Selected action: ${action}`);
     };
 
     return (
@@ -161,14 +179,6 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                                 <div className="text-sm text-muted-foreground">Created At</div>
                                 <div className="font-medium">{customerData.createdAt}</div>
                             </div>
-                            <div className="grid gap-1">
-                                <div className="text-sm text-muted-foreground">Phone Number</div>
-                                <div className="font-medium">
-                                    <Link href={`tel:${customerData.phoneNumber}`} prefetch={false}>
-                                        {customerData.phoneNumber}
-                                    </Link>
-                                </div>
-                            </div>
                         </div>
                     </CardContent>
                 </Card>
@@ -199,18 +209,46 @@ export default function CustomerDetailPage({ params }: { params: any }) {
             <div className="grid gap-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Contact Customer</CardTitle>
+                        <CardTitle>Contact Pass Manager</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="subject">Subject</Label>
-                            <Input id="subject" placeholder="Enter subject" />
+                            <Label htmlFor="email">Email</Label>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="w-full">
+                                        {selectedEmail || "Select Email"}
+                                        <ChevronDownIcon className="ml-auto h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start">
+                                    {customerEmails.length > 0 && (
+                                        customerEmails.map(email => (
+                                            <DropdownMenuItem key={email} onClick={() => handleEmailSelect(email)}>
+                                                {email}
+                                            </DropdownMenuItem>
+                                        ))
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="message">Message</Label>
-                            <Textarea id="message" placeholder="Enter message" className="min-h-[150px]" />
+                            <Label htmlFor="action">Action</Label>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="w-full">
+                                        Select Action
+                                        <ChevronDownIcon className="ml-auto h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start">
+                                    <DropdownMenuItem onClick={() => handleActionSelect("Send Email")}>Send Email</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleActionSelect("Schedule Call")}>Schedule Call</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleActionSelect("Request Update")}>Request Update</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
-                        <Button>Send Email</Button>
+                        <Button>Submit</Button>
                     </CardContent>
                 </Card>
             </div>
@@ -252,6 +290,32 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                                 Cancel
                             </Button>
                             <Button onClick={handleSaveCustomer}>Save</Button>
+                        </DialogFooter>
+                    </div>
+                </DialogContent>
+            </Dialog>
+            <Dialog open={isEmailDialogOpen} onOpenChange={setIsEmailDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Email Details</DialogTitle>
+                        <DialogDescription>
+                            Here you can see details about the selected email.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="selectedEmail">Selected Email</Label>
+                            <Input
+                                id="selectedEmail"
+                                type="email"
+                                value={selectedEmailForDialog || ''}
+                                readOnly
+                            />
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setIsEmailDialogOpen(false)}>
+                                Close
+                            </Button>
                         </DialogFooter>
                     </div>
                 </DialogContent>

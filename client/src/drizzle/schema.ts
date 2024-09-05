@@ -50,6 +50,16 @@ export const customers = pgTable("customers", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 })
 
+export const smtpconfig = pgTable("smtpconfig", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  host: text("host").notNull(),
+  port: integer("port").notNull(),
+  username: text("username").notNull(),
+  password: text("password").notNull(),
+  ssl: boolean("ssl").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
 export const adminUserEmailAddresses = pgTable(
   "adminUserEmailAddresses",
   {
