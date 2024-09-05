@@ -1,6 +1,5 @@
-import { customers } from "@/drizzle/schema";
-import { customersRouter } from "./routers/customers";
 import { router } from "./trpc";
+import { customersRouter } from "./routers/customers";
 
 export const appRouter = router({
   customers: customersRouter,

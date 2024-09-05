@@ -58,7 +58,7 @@ export const customersRouter = router({
   create: publicProcedure.input(z.object({
     fullname: z.string().nonempty(), // Assurez-vous que le nom est non vide
     email: z.string().email(), // Validation email
-    duree: z.number().min(0), // Assurez-vous que duree est positif
+    duree: z.number().min(0), // Assurez-vous que duree est positif// Assurez-vous que le pays est non vide
   })).mutation(async (opts) => {
     const { input } = opts;
 
@@ -67,39 +67,25 @@ export const customersRouter = router({
         fullname: input.fullname,
         email: input.email,
         duree: input.duree,
-        createdAt: new Date(), // Assurez-vous que la date de création est incluse
+        createdAt: new Date(),
       });
     } catch (e) {
       console.error('Error creating customer:', e);
       throw new Error('Failed to create customer.'); // Fournir un message d'erreur plus utile
     }
   }),
-
-  getById: publicProcedure.input(z.string()).query(async (opts) => {
-    const { input: id } = opts;
-
-    console.log(`Received request to fetch customer with ID: ${id}`);
-
+  getById: publicProcedure.input(z.object({
+    id: z.string(), // Assurez-vous que l'ID est une chaîne
+  })).query(async ({ input }) => {
     try {
-      // Utiliser 'eq' pour la comparaison
-      const customer = await db
-        .select()
-        .from(customers)
-        .where(eq(customers.id, id))
-        .limit(1)
-        .execute(); // Peut-être que 'execute' est nécessaire
-
-      console.log(`Fetched customer data: ${JSON.stringify(customer)}`);
-
+      const customer = await db.select().from(customers).where(eq(customers.id, input.id)).limit(1);
       if (customer.length === 0) {
-        console.log("Customer not found.");
-        throw new Error("Customer not found");
+        throw new Error('Customer not found');
       }
-
       return customer[0];
     } catch (e) {
       console.error('Error fetching customer by ID:', e);
-      throw e;
+      throw new Error('Failed to fetch customer.');
     }
   }),
 });

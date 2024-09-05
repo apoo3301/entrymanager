@@ -53,7 +53,7 @@ const CustomersTable = ({
   const router = useRouter();
 
   const handleRowClick = (id: string) => {
-    router.push(`/agency/profile/admin-dashboard/customers/id=${id}`);
+    router.push(`/agency/profile/admin-panel/customers/${id}`);
   };
 
   // Trier les clients par date de création décroissante (juste pour assurer le bon ordre côté client)
@@ -123,7 +123,7 @@ const CustomersTable = ({
             {currentPage > 1 && (
               <PaginationItem>
                 <PaginationPrevious
-                  href={`/agency/profile/admin-dashboard/customers?page=${
+                  href={`/agency/profile/admin-panel/customers?page=${
                     currentPage - 1
                   }&totalItems=${totalItems}`}
                 />
@@ -132,7 +132,7 @@ const CustomersTable = ({
             {Array.from({ length: totalPages }).map((_, index) => (
               <PaginationItem key={index}>
                 <PaginationLink
-                  href={`/agency/profile/admin-dashboard/customers?page=${
+                  href={`/agency/profile/admin-panel/customers?page=${
                     index + 1
                   }&totalItems=${totalItems}`}
                 >
@@ -146,7 +146,7 @@ const CustomersTable = ({
             {totalPages !== currentPage && (
               <PaginationItem>
                 <PaginationNext
-                  href={`/agency/profile/admin-dashboard/customers?page=${
+                  href={`/agency/profile/admin-panel/customers?page=${
                     currentPage + 1
                   }&totalItems=${totalItems}`}
                 />
