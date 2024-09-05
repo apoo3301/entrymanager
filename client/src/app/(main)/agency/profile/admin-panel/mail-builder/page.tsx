@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -8,12 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { trpc } from "@/server/client";
+import { useRouter } from 'next/navigation'
+
 
 function MailingPage() {
+  const router = useRouter()
   const [templateName, setTemplateName] = useState("Template 1");
   const [isNewTemplateDialogOpen, setIsNewTemplateDialogOpen] = useState(false);
   const [newTemplateName, setNewTemplateName] = useState("");
   const { mutateAsync: createTemplate } = trpc.mails.createTemplate.useMutation();
+  const [templates, setTemplates] = useState<string[]>([]);
 
   const handleOpenNewTemplateDialog = () => {
     setIsNewTemplateDialogOpen(true);
@@ -28,11 +32,21 @@ function MailingPage() {
       await createTemplate({ name: newTemplateName });
       console.log("Created new template with name:", newTemplateName);
       setIsNewTemplateDialogOpen(false);
-      setNewTemplateName("");  // Réinitialiser le champ de nom
+      setNewTemplateName("");
+      router.refresh();
     } catch (error) {
       console.error("Error creating new template:", error);
     }
   };
+
+  const { data: fetchedTemplates } = trpc.mails.getTemplates.useQuery();
+
+  useEffect(() => {
+    if (fetchedTemplates) {
+      const templateNames = fetchedTemplates.map(template => template.name || "");
+      setTemplates(templateNames);
+    }
+  }, [fetchedTemplates]);
 
   return (
     <div className="flex flex-col h-[80dvh] bg-background">
@@ -49,9 +63,15 @@ function MailingPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setTemplateName("Template 1")}>Template 1</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTemplateName("Template 2")}>Template 2</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTemplateName("Template 3")}>Template 3</DropdownMenuItem>
+                  {templates.length > 0 ? (
+                    templates.map(template => (
+                      <DropdownMenuItem key={template} onClick={() => setTemplateName(template)}>
+                        {template}
+                      </DropdownMenuItem>
+                    ))
+                  ) : (
+                    <DropdownMenuItem disabled>No templates</DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
               <Dialog>

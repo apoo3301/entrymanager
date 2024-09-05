@@ -20,4 +20,8 @@ export const emailRouter = router({
 
       return newTemplate;
     }),
+    getTemplates: publicProcedure.query(async () => {
+        const templates = await db.select().from(emails);
+        return templates;
+    }),
 });
