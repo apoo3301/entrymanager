@@ -88,4 +88,12 @@ export const customersRouter = router({
       throw new Error('Failed to fetch customer.');
     }
   }),
+  delete: publicProcedure.input(z.string()).mutation(async ({ input: id }) => {
+    try {
+      await db.delete(customers).where(eq(customers.id, id));
+    } catch (e) {
+      console.error('Error deleting customer:', e);
+      throw new Error('Failed to delete customer.');
+    }
+  }),
 });
