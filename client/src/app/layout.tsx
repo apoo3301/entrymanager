@@ -6,6 +6,8 @@ import { Providers } from "@/components/providers";
 import ClientOnlyLayout from "@/components/clientLayout"
 import { TRPCProvider } from "@/components/trpc-provider";
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </ClientOnlyLayout>
         </Providers>
       </ThemeProvider>
-
+      <Toaster />
       </body>
     </html>
   );

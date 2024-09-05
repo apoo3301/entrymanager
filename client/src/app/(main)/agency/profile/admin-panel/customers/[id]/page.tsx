@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FilePenIcon, ChevronDownIcon, TrashIcon } from "lucide-react";
 import { compileWelcomeTemplate, sendMail } from "@/lib/mail";
 import { JSX, SVGProps, useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { sendPass } from "@/lib/serverActions";
@@ -20,6 +21,7 @@ import Link from "next/link";
 
 export default function CustomerDetailPage({ params }: { params: any }) {
     const { id } = params;
+    const { toast } = useToast();
     const router = useRouter();
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -122,10 +124,23 @@ export default function CustomerDetailPage({ params }: { params: any }) {
 
     const send = async () => {
         if (selectedEmail) {
-            await sendPass(selectedEmail);
-        } else {
+            try {
+              await sendPass(selectedEmail);
+              toast({
+                description: "Your message has been sent.",
+                variant: "default",
+                title: "Email sent",
+              });
+            } catch (error) {
+              toast({
+                variant: "destructive",
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+              })
+            }
+          } else {
             console.error("No email selected");
-        }
+          }
     };
 
     return (
@@ -245,6 +260,7 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                             </DropdownMenu>
                         </div>
                         <Button onClick={send}>Send Pass</Button>
+                        {/* <Toast /> */}
                     </CardContent>
                 </Card>
             </div>
