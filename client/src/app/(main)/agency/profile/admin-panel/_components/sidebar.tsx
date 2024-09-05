@@ -36,9 +36,9 @@ export const Sidebar = () => {
               <Settings className="h-4 w-4" />
               SMTP
             </Link>
-            <Link href="/agency/profile/admin-panel/mailing" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
+            <Link href="/agency/profile/admin-panel/mail-builder" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
               <MailCheck className="h-4 w-4" />
-              Mailing Config
+              Mail Builder
             </Link>
           </nav>
         </div>

@@ -1,19 +1,19 @@
 "use client";
 
-import { trpc } from "@/server/client";
-import { useRouter } from "next/navigation";
-import { JSX, SVGProps, useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { FilePenIcon, ChevronDownIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { JSX, SVGProps, useEffect, useState } from "react";
+import { FilePenIcon, ChevronDownIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
+import { trpc } from "@/server/client";
+import Link from "next/link";
 
 export default function CustomerDetailPage({ params }: { params: any }) {
     const { id } = params;
@@ -76,7 +76,6 @@ export default function CustomerDetailPage({ params }: { params: any }) {
 
     useEffect(() => {
         if (emailsData) {
-            // Update customerEmails with the new email
             setCustomerEmails([customerData.email || '']);
             setSelectedEmail(customerData.email || '');
         }
@@ -243,8 +242,6 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start">
                                     <DropdownMenuItem onClick={() => handleActionSelect("Send Email")}>Send Email</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleActionSelect("Schedule Call")}>Schedule Call</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleActionSelect("Request Update")}>Request Update</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
