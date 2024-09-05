@@ -1,3 +1,4 @@
+import { Sub } from "@radix-ui/react-navigation-menu";
 import { create } from "domain";
 import { sql, SQL } from "drizzle-orm";
 import {
@@ -22,6 +23,13 @@ export function lower(email: AnyPgColumn): SQL {
 }
 
 export const roleEnum = pgEnum("role", ["user", "admin"]);
+
+export const emails = pgTable('emails', {
+  id: uuid("id").primaryKey().defaultRandom(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
 
 export const users = pgTable(
   "user",
