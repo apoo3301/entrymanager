@@ -1,23 +1,21 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FilePenIcon, ChevronDownIcon, TrashIcon } from "lucide-react";
-import { compileWelcomeTemplate, sendMail } from "@/lib/mail";
-import { JSX, SVGProps, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { sendPass } from "@/lib/serverActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
 import { trpc } from "@/server/client";
 import Link from "next/link";
-
+import { sendPass } from "@/lib/serverActions";
 
 export default function CustomerDetailPage({ params }: { params: any }) {
     const { id } = params;
@@ -42,30 +40,30 @@ export default function CustomerDetailPage({ params }: { params: any }) {
     const { data: emailsData } = trpc.customers.getEmails.useQuery();
     const deleteCustomer = trpc.customers.delete.useMutation({
         onSuccess: () => {
-            console.log('Customer deleted successfully.');
+            toast({ description: 'Customer deleted successfully.', variant: 'default' });
             router.push('/agency/profile/admin-panel/customers');
         },
         onError: (error) => {
-            console.error('Failed to delete customer:', error.message);
+            toast({ description: `Failed to delete customer: ${error.message}`, variant: 'destructive' });
         },
     });
 
     const editCustomer = trpc.customers.edit.useMutation({
         onSuccess: () => {
-            console.log('Customer updated successfully.');
+            toast({ description: 'Customer updated successfully.', variant: 'default' });
             setIsEditModalOpen(false);
         },
         onError: (error) => {
-            console.error('Failed to update customer:', error.message);
+            toast({ description: `Failed to update customer: ${error.message}`, variant: 'destructive' });
         },
     });
 
     useEffect(() => {
         if (error) {
-            console.error('Failed to load customer:', error.message);
+            toast({ description: `Failed to load customer: ${error.message}`, variant: 'destructive' });
             router.push('/agency/profile/admin-panel/customers');
         }
-    }, [error, router]);
+    }, [error, router, toast]);
 
     useEffect(() => {
         if (data) {
@@ -118,29 +116,17 @@ export default function CustomerDetailPage({ params }: { params: any }) {
         setSelectedEmail(email);
     };
 
-    const handleActionSelect = (action: string) => {
-        console.log(`Selected action: ${action}`);
-    };
-
     const send = async () => {
         if (selectedEmail) {
             try {
-              await sendPass(selectedEmail);
-              toast({
-                description: "Your message has been sent.",
-                variant: "default",
-                title: "Email sent",
-              });
+                await sendPass(selectedEmail);
+                toast({ description: 'Your message has been sent.', variant: 'default', title: 'Email sent' });
             } catch (error) {
-              toast({
-                variant: "destructive",
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
-              })
+                toast({ variant: 'destructive', title: 'Uh oh! Something went wrong.', description: 'There was a problem with your request.' });
             }
-          } else {
-            console.error("No email selected");
-          }
+        } else {
+            console.error('No email selected');
+        }
     };
 
     return (
@@ -260,7 +246,6 @@ export default function CustomerDetailPage({ params }: { params: any }) {
                             </DropdownMenu>
                         </div>
                         <Button onClick={send}>Send Pass</Button>
-                        {/* <Toast /> */}
                     </CardContent>
                 </Card>
             </div>

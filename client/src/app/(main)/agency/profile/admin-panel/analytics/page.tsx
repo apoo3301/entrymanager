@@ -14,7 +14,7 @@ export default function AnalyticsPage() {
           Website in Progress
         </h1>
         <p className="mt-4 text-muted-foreground">
-          We're working hard to bring you an amazing new experience. Please check back soon!
+          We`&apos;`re working hard to bring you an amazing new experience. Please check back soon!
         </p>
         <div className="mt-6">
           <Progress value={50} className="w-full" />
