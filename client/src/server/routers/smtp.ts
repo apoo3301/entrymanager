@@ -53,4 +53,27 @@ export const smtpRouter = router({
       throw new Error('Failed to retrieve SMTP config.');
     }
   }),
+  getSMTPConfig: publicProcedure.query(async () => {
+    try {
+      const currentConfig = await db
+        .select()
+        .from(smtpconfig)
+        .orderBy(desc(smtpconfig.createdAt))
+        .limit(1);
+
+      if (currentConfig.length === 0) {
+        throw new Error('No SMTP config found.');
+      }
+
+      return {
+        host: currentConfig[0].host,
+        port: currentConfig[0].port,
+        username: currentConfig[0].username,
+        ssl: currentConfig[0].ssl,
+      };
+    } catch (error) {
+      console.error('Error fetching SMTP config:', error);
+      throw new Error('Failed to retrieve SMTP config.');
+    }
+  }),
 });
