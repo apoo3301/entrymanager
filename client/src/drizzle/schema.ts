@@ -13,6 +13,7 @@ import {
   uniqueIndex,
   json,
   uuid,
+  serial,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 import { email } from "valibot";
@@ -24,11 +25,12 @@ export function lower(email: AnyPgColumn): SQL {
 
 export const roleEnum = pgEnum("role", ["user", "admin"]);
 
-export const emails = pgTable('emails', {
-  id: uuid("id").primaryKey().defaultRandom(),
-  subject: text("subject").notNull(),
-  body: text("body").notNull(),
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
+export const emails = pgTable("emails", {
+  id: serial("id").primaryKey(),
+  name: text("name"),
+  subject: text("subject"),
+  body: text("body"),
+  createdat: timestamp("createdat"),
 });
 
 export const users = pgTable(

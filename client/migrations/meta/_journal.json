@@ -22,6 +22,62 @@
       "when": 1725570323896,
       "tag": "0002_amusing_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725572152022,
+      "tag": "0003_young_valeria_richards",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1725572216963,
+      "tag": "0004_peaceful_pride",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1725572262469,
+      "tag": "0005_open_jocasta",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725572293307,
+      "tag": "0006_round_santa_claus",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1725572371102,
+      "tag": "0007_loose_risque",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1725572414879,
+      "tag": "0008_outstanding_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1725572535206,
+      "tag": "0009_conscious_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1725572616432,
+      "tag": "0010_perfect_penance",
+      "breakpoints": true
     }
   ]
 }

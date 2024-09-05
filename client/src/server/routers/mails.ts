@@ -1,28 +1,23 @@
-import { eq, desc, count, or, ilike } from "drizzle-orm";
+import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import { emails } from "@/drizzle/schema";
 import db from "@/drizzle";
-import { z } from "zod";
 
 export const emailRouter = router({
-  saveTemplate: publicProcedure
-    .input(
-      z.object({
-        subject: z.string(),
-        body: z.string(),
-      })
-    )
+    createTemplate: publicProcedure
+    .input(z.object({
+      name: z.string(),
+    }))
     .mutation(async ({ input }) => {
-      const { subject, body } = input;
+      const { name } = input;
 
-      const [savedTemplate] = await db
-        .insert(emails)
-        .values({
-          subject,
-          body,
-        })
-        .returning();
+      const [newTemplate] = await db.insert(emails).values({
+        name,
+        subject: "",
+        body: "",
+        createdat: new Date(),
+      }).returning();
 
-      return savedTemplate;
+      return newTemplate;
     }),
 });
