@@ -1,53 +1,53 @@
-// import nodemailer from 'nodemailer';
-// import db from '@/drizzle';
-// import { smtpconfig } from '@/drizzle/schema';
-// import { desc } from 'drizzle-orm';
+import nodemailer from "nodemailer";
+import * as handlebars from "handlebars";
+import { welcomeTemplate } from "./template/welcome";
 
-// export async function sendMail({
-//   to,
-//   name,
-//   subject,
-//   body
-// }: {
-//   to: string;
-//   name: string;
-//   subject: string;
-//   body: string;
-// }) {
-//   try {
-//     const [smtpConfig] = await db
-//       .select()
-//       .from(smtpconfig)
-//       .orderBy(desc(smtpconfig.createdAt))
-//       .limit(1);
+export async function sendMail({
+  to,
+  name,
+  subject,
+  body,
+}: {
+  to: string;
+  name: string;
+  subject: string;
+  body: string;
+}) {
+  const { SMTP_EMAIL, SMTP_PASSWORD } = process.env;
 
-//     if (!smtpConfig) {
-//       throw new Error('SMTP configuration not found.');
-//     }
+  const transport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: SMTP_EMAIL,
+      pass: SMTP_PASSWORD,
+    },
+  });
+  try {
+    const testResult = await transport.verify();
+    console.log(testResult);
+  } catch (error) {
+    console.error({ error });
+    return;
+  }
 
-//     const transporter = nodemailer.createTransport({
-//       host: smtpConfig.host,
-//       port: smtpConfig.port,
-//       secure: smtpConfig.ssl,
-//       auth: {
-//         user: smtpConfig.username,
-//         pass: smtpConfig.password,
-//       },
-//     });
+  try {
+    const sendResult = await transport.sendMail({
+      from: SMTP_EMAIL,
+      to,
+      subject,
+      html: body,
+    });
+    console.log(sendResult);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     const mailOptions = {
-//       from: `"${name}" <${smtpConfig.username}>`,
-//       to,
-//       subject,
-//       text: body,
-//     };
-
-//     const info = await transporter.sendMail(mailOptions);
-
-//     console.log('Email sent:', info.response);
-//     return { success: true, message: 'Email sent successfully' };
-//   } catch (error: unknown) {
-//     console.error('Error sending email:', error);
-//     return { success: false, message: (error as Error).message };
-//   }
-// }
+export function compileWelcomeTemplate(name: string, url: string) {
+  const template = handlebars.compile(welcomeTemplate);
+  const htmlBody = template({
+    name: name,
+    url: url,
+  });
+  return htmlBody;
+}
