@@ -1,13 +1,13 @@
 import db from "@/drizzle";
-import { customers } from "@/drizzle/schema"; // Assurez-vous que le chemin est correct
+import { customers } from "@/drizzle/schema";
 import { eq, desc, count, or, ilike } from "drizzle-orm";
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 
 export const customersRouter = router({
   get: publicProcedure.input(z.object({
-    page: z.number().min(1), // Assurez-vous que la page est au moins 1
-    totalItems: z.number().min(1), // Assurez-vous que totalItems est au moins 1
+    page: z.number().min(1),
+    totalItems: z.number().min(1),
     search: z.string().nullable(),
   })).query(async (opts) => {
     try {
@@ -43,7 +43,7 @@ export const customersRouter = router({
         )
         .offset(offset)
         .limit(limit)
-        .orderBy(desc(customers.createdAt)); // Trier par date de création décroissante
+        .orderBy(desc(customers.createdAt));
 
       return {
         items,
@@ -56,9 +56,9 @@ export const customersRouter = router({
   }),
 
   create: publicProcedure.input(z.object({
-    fullname: z.string().nonempty(), // Assurez-vous que le nom est non vide
-    email: z.string().email(), // Validation email
-    duree: z.number().min(0), // Assurez-vous que duree est positif// Assurez-vous que le pays est non vide
+    fullname: z.string().nonempty(),
+    email: z.string().email(),
+    duree: z.number().min(0),
   })).mutation(async (opts) => {
     const { input } = opts;
 
@@ -71,11 +71,11 @@ export const customersRouter = router({
       });
     } catch (e) {
       console.error('Error creating customer:', e);
-      throw new Error('Failed to create customer.'); // Fournir un message d'erreur plus utile
+      throw new Error('Failed to create customer.');
     }
   }),
   getById: publicProcedure.input(z.object({
-    id: z.string(), // Assurez-vous que l'ID est une chaîne
+    id: z.string(),
   })).query(async ({ input }) => {
     try {
       const customer = await db.select().from(customers).where(eq(customers.id, input.id)).limit(1);
@@ -94,6 +94,25 @@ export const customersRouter = router({
     } catch (e) {
       console.error('Error deleting customer:', e);
       throw new Error('Failed to delete customer.');
+    }
+  }),
+  edit: publicProcedure.input(z.object({
+    id: z.string(),
+    fullname: z.string().optional(),
+    email: z.string().email().optional(),
+    duree: z.number().min(0).optional(),
+  })).mutation(async ({ input }) => {
+    const { id, ...updateFields } = input;
+
+    try {
+      if (Object.keys(updateFields).length === 0) {
+        throw new Error('No fields to update.');
+      }
+
+      await db.update(customers).set(updateFields).where(eq(customers.id, id));
+    } catch (e) {
+      console.error('Error updating customer:', e);
+      throw new Error('Failed to update customer.');
     }
   }),
 });

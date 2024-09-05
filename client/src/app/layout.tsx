@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import ClientOnlyLayout from "@/components/clientLayout"
 import { TRPCProvider } from "@/components/trpc-provider";
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,15 +17,21 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className}><ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
         <Providers>
           <ClientOnlyLayout>
-              <TRPCProvider>
-                {children}
-              </TRPCProvider>
-            </ClientOnlyLayout> 
-            {/* Utilisation du composant client */}
+            <TRPCProvider>
+              {children}
+            </TRPCProvider>
+          </ClientOnlyLayout>
         </Providers>
+      </ThemeProvider>
+
       </body>
     </html>
   );

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, ShoppingCart, Package, Users, LineChart, Package2, Bell } from "lucide-react";
 import { SiBoat } from "@icons-pack/react-simple-icons";
+import { ModeToggle } from "@/components/togglemode";
 
 export const Sidebar = () => {
   return (
@@ -14,10 +14,9 @@ export const Sidebar = () => {
             <SiBoat className="h-6 w-6" />
             <span className="">IGY PASS</span>
           </Link>
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">Toggle notifications</span>
-          </Button>
+          <div className="ml-auto"> {/* This will push ModeToggle to the far right */}
+            <ModeToggle />
+          </div>
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
