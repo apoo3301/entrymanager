@@ -9,8 +9,8 @@ export async function sendPass(email: string) {
     }
     await sendMail({
         to: email,
-        name: "Vahid",
-        subject: "Test Mail",
-        body: compileWelcomeTemplate("Vahid", "youtube.com/@sakuradev"),
+        name: "IGY vpdc",
+        subject: "Visiteur Plaisance",
+        body: compileWelcomeTemplate("IGY vpdc", "Visiteur Plaisance"),
     });
 }

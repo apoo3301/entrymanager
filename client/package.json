@@ -1,5 +1,5 @@
 {
-  "name": "authy",
+  "name": "entrymanager",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "dev:watch": "nodemon"
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
@@ -78,6 +79,7 @@
     "drizzle-kit": "^0.23.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "nodemon": "^3.1.4",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
